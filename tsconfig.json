@@ -1,0 +1,17 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/types" },
+    { "path": "packages/validation" },
+    { "path": "packages/config" },
+    { "path": "packages/logging" },
+    { "path": "packages/database" },
+    { "path": "packages/dbt-runner" },
+    { "path": "packages/git-manager" },
+    { "path": "packages/job-queue" },
+    { "path": "packages/scheduler-core" },
+    { "path": "apps/api" },
+    { "path": "apps/scheduler" },
+    { "path": "apps/worker" }
+  ]
+}

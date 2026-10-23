@@ -1,0 +1,10 @@
+import type { FastifyInstance } from 'fastify';
+
+export function registerHealthRoute(app: FastifyInstance): void {
+  app.get('/api/health', async () => ({
+    status: 'ok',
+    service: 'dbt-scheduler',
+    role: 'api',
+    timestamp: new Date().toISOString(),
+  }));
+}

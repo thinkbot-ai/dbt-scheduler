@@ -1,0 +1,36 @@
+# Dependencies and build output
+node_modules
+dist
+coverage
+.vite
+.turbo
+*.tsbuildinfo
+apps/web/dist
+
+# Environment files (never commit real credentials)
+.env
+.env.local
+.env.*.local
+
+# Runtime data
+workspaces
+docker/postgres-data
+*.log
+
+# Secrets / keys (defensive — should never be added)
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+.npmrc
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.bak
+*.orig

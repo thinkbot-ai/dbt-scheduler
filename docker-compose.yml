@@ -1,0 +1,95 @@
+name: dbt-scheduler
+
+services:
+  postgres:
+    image: postgres:16.9-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dbt_scheduler}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dbt_scheduler}
+      POSTGRES_DB: ${POSTGRES_DB:-dbt_scheduler}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-dbt_scheduler} -d ${POSTGRES_DB:-dbt_scheduler}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['api']
+    environment:
+      NODE_ENV: development
+      PROCESS_ROLE: api
+      PORT: '4000'
+      LOG_LEVEL: info
+      DATABASE_URL: postgres://${POSTGRES_USER:-dbt_scheduler}:${POSTGRES_PASSWORD:-dbt_scheduler}@postgres:5432/${POSTGRES_DB:-dbt_scheduler}
+      WEB_ORIGIN: http://localhost:3000
+    ports:
+      - '4000:4000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['scheduler']
+    environment:
+      NODE_ENV: development
+      PROCESS_ROLE: scheduler
+      LOG_LEVEL: info
+      DATABASE_URL: postgres://${POSTGRES_USER:-dbt_scheduler}:${POSTGRES_PASSWORD:-dbt_scheduler}@postgres:5432/${POSTGRES_DB:-dbt_scheduler}
+      GIT_TOKEN: ${GIT_TOKEN:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['worker']
+    environment:
+      NODE_ENV: development
+      PROCESS_ROLE: worker
+      LOG_LEVEL: info
+      DATABASE_URL: postgres://${POSTGRES_USER:-dbt_scheduler}:${POSTGRES_PASSWORD:-dbt_scheduler}@postgres:5432/${POSTGRES_DB:-dbt_scheduler}
+      WORKSPACE_ROOT: /workspaces
+      GIT_TOKEN: ${GIT_TOKEN:-}
+    volumes:
+      - workspaces:/workspaces
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['web']
+    environment:
+      NODE_ENV: development
+      PROCESS_ROLE: web
+      API_PROXY_TARGET: http://api:4000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  workspaces:

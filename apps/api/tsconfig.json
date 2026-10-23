@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts"],
+  "references": [
+    { "path": "../../packages/types" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/logging" },
+    { "path": "../../packages/database" },
+    { "path": "../../packages/git-manager" },
+    { "path": "../../packages/job-queue" },
+    { "path": "../../packages/scheduler-core" },
+    { "path": "../../packages/validation" }
+  ]
+}

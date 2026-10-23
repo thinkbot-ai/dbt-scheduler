@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+package-lock.json
+*.min.js
+docker/postgres-data
+db/migrations/meta

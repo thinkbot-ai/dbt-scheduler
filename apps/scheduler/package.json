@@ -1,0 +1,22 @@
+{
+  "name": "@dbt-scheduler/scheduler",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@dbt-scheduler/config": "*",
+    "@dbt-scheduler/database": "*",
+    "@dbt-scheduler/job-queue": "*",
+    "@dbt-scheduler/logging": "*",
+    "@dbt-scheduler/scheduler-core": "*",
+    "@dbt-scheduler/types": "*"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3"
+  }
+}

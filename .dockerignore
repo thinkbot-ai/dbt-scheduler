@@ -1,0 +1,14 @@
+node_modules
+.git
+.env
+coverage
+dist
+*.md
+docs
+tests
+**/*.test.ts
+**/*.tsbuildinfo
+apps/web/node_modules
+docker/postgres-data
+.vscode
+.idea
